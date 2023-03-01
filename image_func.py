@@ -35,6 +35,6 @@ def extract_keypoints(results):
 DATA_PATH = os.path.join('D:\MIniProject\Raw_Data') 
 
 signs = np.array(['1','2','3','4','5','6','7','8','9','A','B','C','D','F','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'])
-no_sequences = 200
+no_sequences = 600
 
-sequence_length = 30
+#sequence_length = 30
