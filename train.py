@@ -6,20 +6,20 @@ from keras.layers import LSTM, Dense
 from keras.callbacks import TensorBoard
 label_map = {label:num for num, label in enumerate(signs)}
 # print(label_map)
-Processed_Path = "D:\isl\Processed_Data"
+Processed_Path = "D:\MIniProject\Processed_Data"
 sequences, labels = [], []
 for action in signs:
-    for sequence in range(999,1200):
+    for sequence in range(0,600):
         window = []
         for frame_num in range(sequence_length):
-            res = np.load(os.path.join(Processed_Path, action,  "{}.npy".format(sequence)))
+            res = np.load(os.path.join(Processed_Path, action,  "{}.npy".format(sequence)),allow_pickle=True)
             window.append(res)
         sequences.append(window)
         labels.append(label_map[action])
 
 X = np.array(sequences)
 y = to_categorical(labels).astype(int)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
 log_dir = os.path.join('Logs')
 tb_callback = TensorBoard(log_dir=log_dir)
