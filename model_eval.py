@@ -57,19 +57,19 @@ with mp_hands.Hands(
         sequence = sequence[-30:]
 
         try: 
-            #if len(sequence) == 30:
-            res = model.predict(np.expand_dims(sequence, axis=0))[0]
-            print(signs[np.argmax(res)])
-            predictions.append(np.argmax(res))
+            if len(sequence) == 30:
+                res = model.predict(np.expand_dims(sequence, axis=0))[0]
+                print(signs[np.argmax(res)])
+                predictions.append(np.argmax(res))
                 
                 
            
-            if np.unique(predictions[-10:])[0]==np.argmax(res): 
-                if res[np.argmax(res)] > threshold: 
-                    if len(sentence) > 0: 
-                        if signs[np.argmax(res)] != sentence[-1]:
-                            sentence.append(signs[np.argmax(res)])
-                            accuracy.append(str(res[np.argmax(res)]*100))
+                if np.unique(predictions[-10:])[0]==np.argmax(res): 
+                    if res[np.argmax(res)] > threshold: 
+                        if len(sentence) > 0: 
+                            if signs[np.argmax(res)] != sentence[-1]:
+                                sentence.append(signs[np.argmax(res)])
+                                accuracy.append(str(res[np.argmax(res)]*100))
                         else:
                             sentence.append(signs[np.argmax(res)])
                             accuracy.append(str(res[np.argmax(res)]*100)) 
