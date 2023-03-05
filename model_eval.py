@@ -53,30 +53,30 @@ with mp_hands.Hands(
         # draw_styled_landmarks(image, results)
         # 2. Prediction logic
         keypoints = extract_keypoints(results)
-        sequence.append(keypoints)
-        sequence = sequence[-30:]
+        #sequence.append(keypoints)
+        #sequence = sequence[-30:]
 
         try: 
-            if len(sequence) == 30:
-                res = model.predict(np.expand_dims(sequence, axis=0))[0]
-                print(signs[np.argmax(res)])
-                predictions.append(np.argmax(res))
+            #if len(sequence) == 30:
+            res = model.predict(np.expand_dims(sequence, axis=0))[0]
+            print(signs[np.argmax(res)])
+            predictions.append(np.argmax(res))
                 
                 
-            #3. Viz logic
-                if np.unique(predictions[-10:])[0]==np.argmax(res): 
-                    if res[np.argmax(res)] > threshold: 
-                        if len(sentence) > 0: 
-                            if signs[np.argmax(res)] != sentence[-1]:
-                                sentence.append(signs[np.argmax(res)])
-                                accuracy.append(str(res[np.argmax(res)]*100))
+           
+            """if np.unique(predictions[-10:])[0]==np.argmax(res): 
+                if res[np.argmax(res)] > threshold: 
+                    if len(sentence) > 0: 
+                        if signs[np.argmax(res)] != sentence[-1]:
+                            sentence.append(signs[np.argmax(res)])
+                            accuracy.append(str(res[np.argmax(res)]*100))
                         else:
                             sentence.append(signs[np.argmax(res)])
                             accuracy.append(str(res[np.argmax(res)]*100)) 
 
                 if len(sentence) > 1: 
                     sentence = sentence[-1:]
-                    accuracy=accuracy[-1:]
+                    accuracy=accuracy[-1:]"""
 
                 
         except Exception as e:
