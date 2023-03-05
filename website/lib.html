@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISL Detection</title>
+    <link rel ="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+</head>
+<body>
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+            <i class="fa fa-bars"></i>
+        </label>
+        <label class="logo">Sign Detection</label>
+        <ul>
+            <li><a class ="active" href="index.html">HOME</a></li>
+            <li><a href="aboutus.html">ABOUT US</a></li>
+            <li><a href="contact.html">CONTACT</a></li>
+            <li><a href="lib.html">LIBRARY</a></li>
+    </nav>
+    <div class="con">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide"><h1>A</h1><img src="images/A.jpg"></div>
+              <div class="swiper-slide"><h1>B</h1><img src="images/B.jpg"></div>
+              <div class="swiper-slide"><h1>C</h1><img src="images/C.jpg"></div>
+              <div class="swiper-slide"><h1>D</h1><img src="images/D.jpg"></div>
+              <div class="swiper-slide"><h1>E</h1><img src="images/E.jpg"></div>
+              <div class="swiper-slide"><h1>F</h1><img src="images/F.jpg"></div>
+              <div class="swiper-slide"><h1>G</h1><img src="images/G.jpg"></div>
+              <div class="swiper-slide"><h1>H</h1><img src="images/H.jpg"></div>
+              <div class="swiper-slide"><h1>I</h1><img src="images/I.jpg"></div>
+              <div class="swiper-slide"><h1>J</h1><img src="images/J.jpg"></div>
+              <div class="swiper-slide"><h1>K</h1><img src="images/K.jpg"></div>
+              <div class="swiper-slide"><h1>L</h1><img src="images/L.jpg"></div>
+              <div class="swiper-slide"><h1>M</h1><img src="images/M.jpg"></div>
+              <div class="swiper-slide"><h1>N</h1><img src="images/N.jpg"></div>
+              <div class="swiper-slide"><h1>O</h1><img src="images/O.jpg"></div>
+              <div class="swiper-slide"><h1>P</h1><img src="images/P.jpg"></div>
+              <div class="swiper-slide"><h1>Q</h1><img src="images/Q.jpg"></div>
+              <div class="swiper-slide"><h1>R</h1><img src="images/R.jpg"></div>
+              <div class="swiper-slide"><h1>S</h1><img src="images/S.jpg"></div>
+              <div class="swiper-slide"><h1>T</h1><img src="images/T.jpg"></div>
+              <div class="swiper-slide"><h1>U</h1><img src="images/U.jpg"></div>
+              <div class="swiper-slide"><h1>V</h1><img src="images/V.jpg"></div>
+              <div class="swiper-slide"><h1>W</h1><img src="images/W.jpg"></div>
+              <div class="swiper-slide"><h1>X</h1><img src="images/X.jpg"></div>
+              <div class="swiper-slide"><h1>Y</h1><img src="images/Y.jpg"></div>
+              <div class="swiper-slide"><h1>Z</h1><img src="images/Z.jpg"></div>
+              
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-scrollbar"></div>
+          </div>
+    </div>
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        }
+        );
+    </script>
+</body>
+</html>
