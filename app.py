@@ -1,25 +1,36 @@
-import cv2
-import numpy as np
+from image_func import *
 from flask import Flask, render_template, Response
-from keras.models import load_model
-import tensorflow as tf
-from PIL import Image
-#Loading isl prediction model
-model = tf.keras.models.load_model('model.h5')
-# Define a function to preprocess the input image
-def preprocess_image(image):
-    image = Image.fromarray(image).convert('L').resize((64,64))
-    image_array = np.array(image).reshape(1,64,64,1)
-    image_array = image_array/255.0
-    return image_array
-# Define a function to predict signs
-def predict_sign(image):
-    image_array = preprocess_image(image)
-    prediction = model.predict(image_array)
-    predicted_sign = np.argmax(prediction)
-    signs = ['1','2','3','4','5','6','7','8','9','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    predicted_sign = signs[predicted_sign]
-    return predicted_sign
+from keras.models import model_from_json
+from keras.utils import to_categorical
+from keras.layers import LSTM, Dense
+from keras.callbacks import TensorBoard
+
+
+json_file = open("model.json", "r")
+model_json = json_file.read()
+json_file.close()
+model = model_from_json(model_json)
+model.load_weights("model.h5")
+
+colors = []
+for i in range(0,20):
+    colors.append((245,117,16))
+print(len(colors))
+def prob_viz(res, signs, input_frame, colors,threshold):
+    output_frame = input_frame.copy()
+    for num, prob in enumerate(res):
+        cv2.rectangle(output_frame, (0,60+num*40), (int(prob*100), 90+num*40), colors[num], -1)
+        cv2.putText(output_frame, signs[num], (0, 85+num*40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+        
+    return output_frame
+
+
+# 1. New detection variables
+sequence = []
+sentence = []
+accuracy=[]
+predictions = []
+threshold = 0.8 
 # Create a Flask app
 app = Flask(__name__,template_folder='views')
 
@@ -42,34 +53,62 @@ def home():
 # Define a function to capture frames from the web camera
 def webcam_feed():
     cap = cv2.VideoCapture(0)
+        # Set mediapipe model 
+    with mp_hands.Hands(
+        model_complexity=0,
+        min_detection_confidence=0.5,
+        min_tracking_confidence=0.5) as hands:
+        while cap.isOpened():
+            # Read feed
+            ret, frame = cap.read()
 
-    while True:
-        ret, frame = cap.read()
-
-        if ret:
-            # Display the video stream
-            cv2.imshow('Webcam Feed', frame)
-
-            # Wait for the 'q' key to be pressed to stop the program
-            if cv2.waitKey(1) == ord('q'):
+            # Make detections
+            cropframe=frame[40:400,0:300]
+            # print(frame.shape)
+            frame=cv2.rectangle(frame,(0,40),(300,400),255,2)
+            # frame=cv2.putText(frame,"Active Region",(75,25),cv2.FONT_HERSHEY_COMPLEX_SMALL,2,255,2)
+            image, results = mediapipe_detection(cropframe, hands)
+            # print(results)
+        
+            # Draw landmarks
+            # draw_styled_landmarks(image, results)
+            # 2. Prediction logic
+            keypoints = extract_keypoints(results)
+            sequence.append(keypoints)
+            sequence = sequence[-30:]
+            try: 
+                if len(sequence) == 30:
+                    res = model.predict(np.expand_dims(sequence, axis=0))[0]
+                    print(signs[np.argmax(res)])
+                    predictions.append(np.argmax(res))
+                    if np.unique(predictions[-10:])[0]==np.argmax(res): 
+                        if res[np.argmax(res)] > threshold: 
+                            if len(sentence) > 0: 
+                                if signs[np.argmax(res)] != sentence[-1]:
+                                    sentence.append(signs[np.argmax(res)])
+                                    accuracy.append(str(res[np.argmax(res)]*100))
+                            else:
+                                sentence.append(signs[np.argmax(res)])
+                                accuracy.append(str(res[np.argmax(res)]*100)) 
+                
+                if len(sentence) > 1: 
+                    sentence = sentence[-1:]
+                    accuracy=accuracy[-1:]
+            except Exception as e:
+              pass
+            cv2.rectangle(frame, (0,0), (300, 40), (245, 117, 16), -1)
+            cv2.putText(frame,"Output: -"+' '.join(sentence)+''.join(accuracy), (3,30), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+        
+            # Show to screen
+            cv2.imshow('OpenCV Feed', frame)
+             # Break gracefully
+            if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
+        cap.release()
+        cv2.destroyAllWindows()
 
-            # Predict the ASL sign
-            predicted_sign = predict_sign(frame)
-
-            # Create a JPEG image from the frame
-            _, jpeg = cv2.imencode('.jpg', frame)
-
-            # Yield the JPEG image with the predicted sign
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n'
-                   b'Content-Type: text/plain\r\n\r\n' + predicted_sign.encode() + b'\r\n')
-        else:
-            break
-
-    # Release the web camera and destroy all windows
-    cap.release()
-    cv2.destroyAllWindows()
+    
 # Create a Flask route for the prediction page
 @app.route('/predict')
 def predict():

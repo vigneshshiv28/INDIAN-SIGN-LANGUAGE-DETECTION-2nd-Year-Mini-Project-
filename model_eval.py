@@ -1,4 +1,4 @@
-from image_processing import *
+from image_func import *
 from keras.utils import to_categorical
 from keras.models import model_from_json
 from keras.layers import LSTM, Dense
@@ -63,7 +63,7 @@ with mp_hands.Hands(
                 predictions.append(np.argmax(res))
                 
                 
-           
+            #3. Viz logic
                 if np.unique(predictions[-10:])[0]==np.argmax(res): 
                     if res[np.argmax(res)] > threshold: 
                         if len(sentence) > 0: 
@@ -78,8 +78,10 @@ with mp_hands.Hands(
                     sentence = sentence[-1:]
                     accuracy=accuracy[-1:]
 
-                
+                # Viz probabilities
+                # frame = prob_viz(res, signs, frame, colors,threshold)
         except Exception as e:
+            
             pass
             
         cv2.rectangle(frame, (0,0), (300, 40), (245, 117, 16), -1)
