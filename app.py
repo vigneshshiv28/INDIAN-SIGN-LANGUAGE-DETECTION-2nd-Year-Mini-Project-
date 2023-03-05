@@ -48,7 +48,7 @@ def contact():
     return render_template('contact.html')
 # Create a Flask route for the library page
 @app.route('/library')
-def home():
+def library():
     return render_template('lib.html')
 # Define a function to capture frames from the web camera
 def webcam_feed():
