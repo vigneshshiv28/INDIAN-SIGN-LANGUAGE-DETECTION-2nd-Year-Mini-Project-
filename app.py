@@ -27,6 +27,12 @@ app = Flask(__name__,template_folder='views')
 @app.route('/')
 def home():
     return render_template('index.html')
+@app.route('/about')
+def about():
+    return render_template('about.html')
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
 # Define a function to capture frames from the web camera
 def webcam_feed():
     cap = cv2.VideoCapture(0)

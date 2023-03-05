@@ -53,8 +53,8 @@ with mp_hands.Hands(
         # draw_styled_landmarks(image, results)
         # 2. Prediction logic
         keypoints = extract_keypoints(results)
-        #sequence.append(keypoints)
-        #sequence = sequence[-30:]
+        sequence.append(keypoints)
+        sequence = sequence[-30:]
 
         try: 
             #if len(sequence) == 30:
@@ -64,7 +64,7 @@ with mp_hands.Hands(
                 
                 
            
-            """if np.unique(predictions[-10:])[0]==np.argmax(res): 
+            if np.unique(predictions[-10:])[0]==np.argmax(res): 
                 if res[np.argmax(res)] > threshold: 
                     if len(sentence) > 0: 
                         if signs[np.argmax(res)] != sentence[-1]:
@@ -76,7 +76,7 @@ with mp_hands.Hands(
 
                 if len(sentence) > 1: 
                     sentence = sentence[-1:]
-                    accuracy=accuracy[-1:]"""
+                    accuracy=accuracy[-1:]
 
                 
         except Exception as e:
