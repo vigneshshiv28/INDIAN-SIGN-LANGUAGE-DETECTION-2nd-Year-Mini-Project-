@@ -30,7 +30,7 @@ predictions = []
 threshold = 0.8 
 
 cap = cv2.VideoCapture(0)
-# cap = cv2.VideoCapture("https://192.168.43.41:8080/video")
+
 # Set mediapipe model 
 with mp_hands.Hands(
     model_complexity=0,
@@ -78,10 +78,8 @@ with mp_hands.Hands(
                     sentence = sentence[-1:]
                     accuracy=accuracy[-1:]
 
-                # Viz probabilities
-                # frame = prob_viz(res, signs, frame, colors,threshold)
+                
         except Exception as e:
-            # print(e)
             pass
             
         cv2.rectangle(frame, (0,0), (300, 40), (245, 117, 16), -1)

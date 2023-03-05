@@ -14,7 +14,7 @@ with mp_hands.Hands(
     # Loop sign signs
     for sign in signs:
         # Loop through image
-        for sequence in range(700,1200):
+        for sequence in range(0,1200):
                 #reading image
                 frame=cv2.imread('D:\\MIniProject\\Raw_Data\\{}\\{}.jpg'.format(sign,sequence))
                 # Make detections
