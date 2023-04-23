@@ -32,7 +32,7 @@ accuracy=[]
 predictions = []
 threshold = 0.8 
 # Create a Flask app
-app = Flask(__name__,template_folder='views')
+app = Flask(__name__,template_folder='views',static_folder='static_file')
 
 # Create a Flask route for the home page
 @app.route('/')
@@ -112,7 +112,6 @@ def webcam_feed():
 # Create a Flask route for the prediction page
 @app.route('/predict')
 def predict():
-    return Response(webcam_feed(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
+   return Response(webcam_feed(), mimetype='multipart/x-mixed-replace; boundary=frame')
 if __name__ == '__main__':
     app.run(debug=True)
