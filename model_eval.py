@@ -54,16 +54,16 @@ with mp_hands.Hands(
         # 2. Prediction logic
         keypoints = extract_keypoints(results)
         sequence.append(keypoints)
-        sequence = sequence[-30:]
+        sequence = sequence[-1:]
 
         try: 
-            if len(sequence) == 30:
+            if len(sequence) == 1:
                 res = model.predict(np.expand_dims(sequence, axis=0))[0]
                 print(signs[np.argmax(res)])
                 predictions.append(np.argmax(res))
                 
                 
-            #3. Viz logic
+            #3. Visulization logic
                 if np.unique(predictions[-10:])[0]==np.argmax(res): 
                     if res[np.argmax(res)] > threshold: 
                         if len(sentence) > 0: 
@@ -78,14 +78,12 @@ with mp_hands.Hands(
                     sentence = sentence[-1:]
                     accuracy=accuracy[-1:]
 
-                # Viz probabilities
-                # frame = prob_viz(res, signs, frame, colors,threshold)
         except Exception as e:
             
             pass
             
-        cv2.rectangle(frame, (0,0), (300, 40), (245, 117, 16), -1)
-        cv2.putText(frame,"Output: -"+' '.join(sentence)+''.join(accuracy), (3,30), 
+        cv2.rectangle(frame, (0,0), (640, 40), (245, 117, 16), -1)
+        cv2.putText(frame,"Output: - "+' '.join(sentence)+'  '.join(accuracy), (3,30), 
                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
         
         # Show to screen
